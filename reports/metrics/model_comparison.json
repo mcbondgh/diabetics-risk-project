@@ -1,0 +1,54 @@
+{
+    "Logistic Regression": {
+        "accuracy": 0.8528,
+        "precision": 0.4955,
+        "recall": 0.8407,
+        "f1": 0.6235,
+        "roc_auc": 0.9252,
+        "confusion_matrix": {
+            "true_negative": 37080,
+            "false_positive": 6298,
+            "false_negative": 1172,
+            "true_positive": 6186
+        }
+    },
+    "Random Forest": {
+        "accuracy": 0.9109,
+        "precision": 0.6527,
+        "recall": 0.8236,
+        "f1": 0.7283,
+        "roc_auc": 0.9485,
+        "confusion_matrix": {
+            "true_negative": 40154,
+            "false_positive": 3224,
+            "false_negative": 1298,
+            "true_positive": 6060
+        }
+    },
+    "XGBoost": {
+        "accuracy": 0.8537,
+        "precision": 0.4973,
+        "recall": 0.8092,
+        "f1": 0.616,
+        "roc_auc": 0.9153,
+        "confusion_matrix": {
+            "true_negative": 37360,
+            "false_positive": 6018,
+            "false_negative": 1404,
+            "true_positive": 5954
+        }
+    },
+    "LightGBM": {
+        "accuracy": 0.8619,
+        "precision": 0.5154,
+        "recall": 0.8025,
+        "f1": 0.6277,
+        "roc_auc": 0.9182,
+        "confusion_matrix": {
+            "true_negative": 37826,
+            "false_positive": 5552,
+            "false_negative": 1453,
+            "true_positive": 5905
+        }
+    }
+}

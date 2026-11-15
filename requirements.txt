@@ -1,0 +1,9 @@
+pandas
+scikit-learn
+imbalanced-learn
+joblib
+matplotlib
+seaborn
+xgboost
+lightgbm
+python-dotenv>=1.0,<2

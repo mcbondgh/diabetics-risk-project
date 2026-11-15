@@ -1,0 +1,225 @@
+DIABETES MODEL PERFORMANCE: METRICS AND INTERPRETATION
+======================================================
+
+
+DATA SOURCE 
+https://archive.ics.uci.edu/static/public/891/data.csv
+=======================================================
+
+These results are from the project's held-out test set of 50,736 rows. Values
+below are rounded to four decimal places (or shown as percentages for clarity).
+
+MODEL COMPARISON
+----------------
+
+Model                 Accuracy   Precision   Recall      F1       ROC-AUC
+Logistic Regression   0.8528     0.4955      0.8407    0.6235     0.9252
+Random Forest          0.9109     0.6527      0.8236    0.7283     0.9485
+XGBoost                0.8537     0.4973      0.8092    0.6160     0.9153
+LightGBM               0.8619     0.5154      0.8025    0.6277     0.9182
+
+WHAT THE DIABETES_BINARY VALUES MEAN
+------------------------------------
+
+The target column is Diabetes_binary:
+
+  0 = No diabetes
+  1 = Prediabetes or diabetes
+
+The positive class for the metrics is 1. A model's binary prediction is also
+0 or 1. This is a screening classification based on the survey data, not a
+medical diagnosis. The predictor also reports a probability and risk band;
+those are separate from the binary target value.
+
+PERFORMANCE METRICS
+-------------------
+
+Accuracy
+  The share of all test rows classified correctly:
+  (true negatives + true positives) / all test rows.
+  Random Forest: 0.9109, or 91.09% of test rows classified correctly.
+  Accuracy alone can be misleading when one class is much more common than
+  the other. This dataset has substantially more 0 labels than 1 labels.
+
+Precision
+  Of the rows predicted as class 1, the share that really has label 1:
+  true positives / (true positives + false positives).
+  Random Forest: 0.6527, or 65.27%. About 65 of every 100 positive predictions
+  were correct in this test set.
+
+Recall (sensitivity)
+  Of all rows whose true label is 1, the share the model correctly finds:
+  true positives / (true positives + false negatives).
+  Random Forest: 0.8236, or 82.36%. It found about 82 of every 100 positive
+  rows; about 18 of every 100 were missed.
+
+F1 score
+  The harmonic mean of precision and recall. It is high when both precision
+  and recall are reasonably high, and it penalizes a low value in either one.
+  Random Forest: 0.7283, or 72.83%.
+
+ROC-AUC
+  The area under the Receiver Operating Characteristic curve. It measures how
+  well the model ranks positive cases above negative cases across possible
+  thresholds. 0.5 is roughly chance-level ranking; 1.0 is perfect ranking.
+  Random Forest: 0.9485. This is a strong ranking score, but it does not mean
+  that 94.85% of individual predictions are correct. Accuracy measures that
+  at the chosen classification threshold.
+
+WHY RANDOM FOREST WAS SELECTED
+------------------------------
+
+The configuration selects the model with the highest F1 score. Random Forest
+has the highest F1 in this comparison (0.7283), so it is the selected model.
+It also has the highest accuracy (0.9109) and ROC-AUC (0.9485) among these four
+results. Its precision is higher than the other models, while its recall is
+slightly below Logistic Regression (0.8236 versus 0.8407). Thus, Random Forest
+is best under the project's configured F1 selection rule; it is not best for
+every possible priority. If the main priority is finding the greatest share
+of positive cases, recall should be emphasized and Logistic Regression has the
+highest reported recall here.
+
+For context, the Random Forest confusion matrix on the test set was:
+  True negatives: 40,154  (actual 0 predicted 0)
+  False positives: 3,224  (actual 0 predicted 1)
+  False negatives: 1,298  (actual 1 predicted 0)
+  True positives: 6,060   (actual 1 predicted 1)
+
+CHAPTER FOUR IMPLEMENTATION NOTES
+=================================
+
+4.3 Data preparation implementation
+-----------------------------------
+
+The loader reads the BRFSS CSV, checks that the configured target and feature
+columns exist, selects the 16 configured predictors plus Diabetes_binary, and
+drops rows with missing values. The split is stratified and uses 80% of the
+available rows for model development and 20% for the held-out test set.
+
+StandardScaler is applied to Logistic Regression only; the tree-based models
+are not scaled. SMOTE is part of the imbalanced-learn pipeline passed to
+GridSearchCV. This means oversampling is fitted within each training fold,
+rather than being applied to the full dataset before splitting. The current
+SMOTE method can interpolate fractional values for binary and ordinal survey
+features; this limitation should be discussed or addressed before treating
+the synthetic training points as realistic survey records.
+
+4.4 Model training
+------------------
+
+GridSearchCV uses StratifiedKFold with 3 folds, shuffle=True, random_state=42,
+and F1 scoring. The best estimator is refitted on all training rows after the
+search. The configured grids and selected parameters from the saved model
+artifacts are:
+
+  Logistic Regression
+    Grid: C = [0.1, 1, 10]
+    Selected: C = 10
+
+  Random Forest
+    Grid: n_estimators = [100, 200]; max_depth = [10, 20]
+    Selected: n_estimators = 200; max_depth = 20
+
+  XGBoost
+    Grid: n_estimators = [200, 400]; max_depth = [3, 5];
+          learning_rate = [0.05, 0.1]
+    Selected: n_estimators = 400; max_depth = 5; learning_rate = 0.1
+
+  LightGBM
+    Grid: n_estimators = [200, 400]; num_leaves = [31, 63];
+          learning_rate = [0.05, 0.1]
+    Selected: n_estimators = 400; num_leaves = 63; learning_rate = 0.1
+
+4.5 Model evaluation
+--------------------
+
+The metrics table above is also saved as reports/metrics/model_comparison.csv
+and reports/metrics/model_comparison.json. Evaluation includes accuracy,
+precision, recall, F1, ROC-AUC, and confusion matrices on the held-out test
+split. The generated visual comparisons are:
+
+  reports/figures/02_metric_comparison.png
+  reports/figures/03_confusion_matrices.png
+  reports/figures/04_roc_curves.png
+  reports/figures/05_precision_recall_curves.png
+
+Important evaluation limitation: main.py chooses the final best model using
+F1 measured on this same held-out test set. Therefore, the test set is used
+both to compare/select a model and to report its score. For a fully independent
+final performance estimate, select the model using training cross-validation
+or a validation set, then evaluate the selected model once on a separate,
+untouched test set.
+
+4.6 Explainability (SHAP)
+------------------------
+
+SHAP summary plots and individual SHAP explanations are not currently
+generated by this project. The existing
+reports/figures/06_feature_importance.png is the selected Random Forest's
+built-in feature_importances_ plot; it is not a SHAP explanation. To complete
+this section, add a SHAP summary plot and an individual explanation (for
+example, a waterfall plot), and describe them separately from the existing
+feature-importance plot. SHAP explanations describe model behavior; they do
+not establish that a feature causes diabetes.
+
+GRAPH-BY-GRAPH INTERPRETATION
+=============================
+
+01_class_distribution.png — Class distribution
+  The dataset contains 216,891 rows labeled 0 (85.5%) and 36,789 labeled 1
+  (14.5%). The classes are imbalanced: the model sees many more no-diabetes
+  rows than prediabetes/diabetes rows. This is why accuracy should be read
+  together with precision, recall, and F1. The chart describes the input data,
+  not model predictions.
+
+02_metric_comparison.png — Model performance comparison
+  Each group compares the four models across the five reported metrics.
+  Random Forest leads in accuracy (0.9109), precision (0.6527), F1 (0.7283),
+  and ROC-AUC (0.9485). Logistic Regression has the highest recall (0.8407),
+  so it finds a slightly larger share of positive cases but has lower
+  precision. The plot shows metrics at the project's classification threshold
+  except ROC-AUC, which summarizes ranking across thresholds.
+
+03_confusion_matrices.png — Confusion matrices
+  Rows are actual classes and columns are predicted classes. The upper-left
+  cell is correctly predicted 0; the lower-right is correctly predicted 1.
+  The other two cells are false positives (upper-right) and false negatives
+  (lower-left). For Random Forest, 40,154 negatives and 6,060 positives were
+  correctly classified; it produced 3,224 false positives and 1,298 false
+  negatives. The false-negative count matters when missed positive cases are
+  a concern; the false-positive count matters when unnecessary follow-up is
+  costly.
+
+04_roc_curves.png — ROC curves
+  The x-axis is false-positive rate and the y-axis is true-positive rate
+  (recall). A curve closer to the upper-left indicates better separation of
+  the two classes across thresholds. The dashed diagonal is chance-level
+  ranking. Random Forest is strongest here, consistent with its highest
+  ROC-AUC of 0.9485; the other AUC values are listed in the comparison table.
+
+05_precision_recall_curves.png — Precision-recall curves
+  The x-axis is recall and the y-axis is precision as the decision threshold
+  changes. Moving toward higher recall generally lowers precision: the model
+  catches more positive cases but also flags more negative cases. Random
+  Forest's curve is above the other curves through most of the displayed
+  range, indicating a stronger precision-recall trade-off on this test set.
+  This plot is particularly useful with the 14.5% positive-class prevalence.
+
+06_feature_importance.png — Random Forest feature importance
+  The bars rank the configured features by the Random Forest's built-in
+  feature_importances_ values. BMI has the largest value in this run, followed
+  by GenHlth, PhysHlth, and Age. These values describe how the fitted forest
+  used features to reduce impurity across its splits. They do not show whether
+  a feature raises or lowers predicted risk, do not measure causal effects,
+  and do not explain an individual prediction. This is not a SHAP plot.
+
+INTERPRETATION CAVEAT
+---------------------
+
+The dataset contains repeated feature-and-label rows, and 17,050 test rows
+have an identical row in the training split. If those repetitions are
+accidental copies, the reported test scores may be optimistic. Their origin
+cannot be determined from the available columns alone. Also, the current
+SMOTE setup can create fractional values for binary or ordinal survey inputs.
+Consider these data and preprocessing issues before presenting the scores as
+final or as evidence of clinical performance.

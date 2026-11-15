@@ -1,0 +1,20 @@
+{
+  "ageYears": 45,
+  "sex": "female",
+  "heightCm": 165,
+  "weightKg": 85,
+  "smoker": false,
+  "physicallyActive": false,
+  "eatsFruitDaily": true,
+  "eatsVegetablesDaily": false,
+  "heavyAlcohol": false,
+  "generalHealth": 3,
+  "mentalHealthDays": 2,
+  "physicalHealthDays": 5,
+  "difficultyWalking": false,
+  "educationLevel": 4,
+  "incomeBand": 5,
+  "highBloodPressure": false,
+  "highCholesterol": false,
+  "consentToResearchUse": false
+}
