@@ -1,0 +1,86 @@
+/* CSS for Home component */
+.home-speedometer {
+    position: relative;
+    padding:10px;
+    width: 100%;
+    margin: 10px auto;
+    background: #ECEBFA;
+    border-radius: 28px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-img {
+    width: 50%;
+}
+.home-div {
+    box-sizing: border-box;
+    width: 60%;
+    margin: auto;
+    min-height:100vh;
+}
+.home-h6 {
+    color: var(--default-color)
+}
+
+.home-div-row-two p {
+    color: #808080;
+}
+.note-book-icon {
+    width:30px;
+    margin:10px 0
+}
+.card-div-h3 {
+    font-weight:bolder;
+    margin:10px 0;
+}
+.card-div-span {
+    color:#808080;
+}
+.row-three-card-one {
+    margin:10px 10px 10px 0;
+
+}
+.row-three-card-one p {
+    color:#808080;
+}
+.start-question-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 56px;
+    background: #3730A3;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 16px;
+    text-decoration: none;
+    border:none;
+}
+
+.home-div .warning-span {
+    min-width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: #ffefef;
+    font-size: smaller;
+    color: red;
+    text-align: center;
+    padding: 5px;
+    margin: 10px auto;
+}
+.empty-container {
+    /*    padding:10px;*/
+}
+@media (max-width: 768px) {
+    .home-div {
+        width: 100%;
+    }
+
+    .home-div-row-three {
+        display: flex;
+        flex-direction: column;
+    }
+}

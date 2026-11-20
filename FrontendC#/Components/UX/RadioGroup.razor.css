@@ -1,0 +1,41 @@
+/* CSS for RadioGroup component */
+.radio-group {
+    display: flex;
+    gap: 1rem;
+    margin:10px auto;
+    width:100%;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    background-color:white;
+    padding:8px;
+    width:100%;
+    border-radius:5px;
+    cursor: pointer;
+    font-weight:bold;
+    color:var(--default-color);
+    transition: all 0.2s ease;
+}
+
+.radio-div {
+    background-color:white;
+    padding:5px 10px;
+    width:20%;
+    border-radius:8px;
+}
+.radio-input {
+    color:green;
+    background: red;
+}
+
+
+
+
+@media (max-width: 768px) {
+    .radio-div {
+        width: 100%;
+    }
+}

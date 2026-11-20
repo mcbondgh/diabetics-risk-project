@@ -1,0 +1,91 @@
+﻿@using DiabeticsApp.Components.UX
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@layout EmptyLayout
+
+@page "/results"
+
+<PageTitle> Results </PageTitle>
+
+
+<section class="results-page-div">
+    <button class="back-button" onclick="@NavigateToQuestionsPage">Back To Questions</button>
+    <hr />
+
+    <!--RUNS FIRST TO CHECK IF USER CAN ACCESS THE PAGE ON QUERY PARAMS SET-->
+    @if (!CanAccessPage)
+    {
+        <div class="alert alert-danger align-content-center">
+            This page cannot be accessed directly.
+            Please return to the questionnaire.
+        </div>
+    }
+    else
+    {
+        <section class="screening-answer-section">
+
+            <div class="screening-hero-div">
+                <h5 class="screening-results-label">Your screening result</h5>
+                <img src="speedometer.png" class="screening-speedometer"/>
+                <h1 class="risk-score-label">@RiskScore</h1>
+                <p class="risk-score-p align-content-center">risk score, from 0 to 1</p>
+
+                <h4 class="@riskRateCssClass">@RiskRate</h4>
+
+            </div>
+
+            <div class="result-row-two-div mt-3 mb-3">
+                <h4 class="result-row-two-h2 fw-bold">Explainable</h4>
+                <span class="result-row-two-span">@Explainable</span>
+            </div>
+
+            <div class="result-row-three-div mt-3">
+                <h4 class="result-row-three-h2 fw-bold">What shaped your estimate</h4>
+                <span class="result-row-three-span">The factors that moved your score the most. They show how the model reached its estimate, not what causes diabetes.</span>
+            </div>
+
+        </section>
+    }
+
+
+
+</section>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int? Age { get; set; }
+
+    [SupplyParameterFromQuery]
+    public double? Bmi { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string? Gender { get; set; }
+
+    public string? RiskScore { get; set; }
+    public string? RiskRate { set; get { return "high"; } }
+
+    private bool CanAccessPage;
+    private string? riskRateCssClass;
+    private string? Explainable;
+
+    protected override void OnInitialized()
+    {
+        CanAccessPage = Age is > 0 && Bmi is > 0 && (Gender == "Male" || Gender == "Female");
+
+        RiskScore = "0.50";
+        riskRateCssClass = riskCheckerMethod();
+        Explainable = "Here is where the ML API Call does the explanation of what this could mean";
+    }
+
+
+    private string riskCheckerMethod()
+    {
+        return RiskRate.Equals("high") ? "risk-high-rate" : RiskRate.Equals("moderate") ? "risk-moderate-rate" : "risk-low-rate";
+    }
+
+    private void NavigateToQuestionsPage()
+    {
+        NavigationManager.NavigateTo("/questions");
+    }
+
+}

@@ -1,0 +1,36 @@
+﻿@typeparam TValue
+
+<div class="radio-group">
+    @foreach (var option in Options)
+    {
+        <label class="radio-option">
+            <input type="radio" class="radio-input"
+                   name="@Name"
+                   checked="@Equals(option.Value, Value)"
+                   @onchange="() => OnSelected(option.Value)" 
+                   />
+            <span>@option.Text</span>
+        </label>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Name { get; set; } = Guid.NewGuid().ToString();
+
+    [Parameter]
+    public TValue? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<TValue> ValueChanged { get; set; }
+
+    [Parameter]
+    public IEnumerable<RadioOption<TValue>> Options { get; set; }
+        = Enumerable.Empty<RadioOption<TValue>>();
+
+    private async Task OnSelected(TValue value)
+    {
+        Value = value;
+        await ValueChanged.InvokeAsync(value);
+    }
+}

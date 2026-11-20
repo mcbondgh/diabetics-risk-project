@@ -1,0 +1,112 @@
+/* CSS for ResultsPage component */
+.results-page-div {
+    box-sizing: border-box;
+    width: 60%;
+    margin: 10px auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 15px;
+    background-color: #FAF6F1;
+}
+.back-button {
+    border:none;
+    background:#eee;
+    padding:10px;
+    border-radius:8px;
+    justify-self:flex-end;
+    font-size:smaller;
+    font-weight:bold;
+}
+
+.back-button:hover {
+    background-color:#ddd;
+    border:1px solid #ddd;
+}
+
+.screening-answer-section {
+
+}
+.screening-hero-div {
+    margin-top: 8px auto;
+    padding: 24px 20px 28px;
+    background: #3730A3;
+    color: #FFFFFF;
+    width:100%;
+    border-radius: 28px;
+}
+.screening-results-label {
+    margin: 0 0 8px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #CFCDF5;
+}
+.screening-speedometer {
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+}
+
+.risk-score-label {
+    font-family: Sora, 'DM Sans', sans-serif;
+    font-size: 46px;
+    font-weight: 700;
+    text-align:center;
+}
+.risk-score-p {
+    text-align:center;
+}
+
+.risk-moderate-rate {
+    padding: 4px 14px;
+    background: #FFC857;
+    color: #1C1B2E;
+    border-radius: 999px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.risk-low-rate {
+    padding: 4px 14px;
+    background: #6beb76;
+    color: #1C1B2E;
+    border-radius: 999px;
+    text-align:center;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.risk-high-rate {
+    padding: 4px 14px;
+    background: #ff0000;
+    color: white;
+    text-align: center;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.result-row-two-div {
+    margin-bottom: 10px;
+    padding: 10px 18px;
+    background: #FFFFFF;
+    border: 1px solid #E2DACD;
+    border-radius: 18px;
+}
+.result-row-three-span {
+    color: #808080;
+}
+
+@media (max-width: 768px) {
+    .results-page-div {
+        width: 100%;
+        padding: 0;
+        border: none;
+    }
+}

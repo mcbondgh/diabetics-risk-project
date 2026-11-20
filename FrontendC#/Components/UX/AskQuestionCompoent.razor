@@ -1,0 +1,32 @@
+﻿
+<div class="question-div">
+    <h4> @YourQuestion </h4>
+    <span>@Description</span>
+
+    <div class="radio-button-container">
+        <RadioGroup TValue="string"
+                    Options="@optionsList"
+                    @bind-Value="@Answer"
+                    />
+    </div>
+    <p>Selected: @Answer</p>
+</div>
+
+@code {
+    private List<RadioOption<string>> optionsList =
+    [
+        new() { Value = "No", Text = "No" },
+        new() { Value = "Yes", Text = "Yes"}
+    ];
+
+    [Parameter, EditorRequired]
+    public string YourQuestion { get; set; } = "";
+
+    [Parameter]
+    public string Description { get; set; } = "";
+
+    [Parameter]
+    public string Answer { get; set; } = "";
+
+    
+}

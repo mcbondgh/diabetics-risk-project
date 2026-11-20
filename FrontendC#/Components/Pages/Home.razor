@@ -1,0 +1,41 @@
+﻿@page "/"
+@layout EmptyLayout
+@inject NavigationManager Navigation
+@* @rendermode InteractiveServer *@
+
+<PageTitle>Home</PageTitle>
+
+<div class="home-div">
+    <h6 class="font-monospace fw-bolder home-h6">Early-screening and risk-awareness aid</h6>
+
+    <div class="home-speedometer">
+        <img src="speedometer.png" class="card-img" />
+    </div>
+
+    <div class="home-div-row-two w-100 align-content-center mt-3 mb-3">
+        <h2 class="row-two-h2 fw-bolder fs-1">Understand your risk of diabetes, and what is driving it</h2>
+        <p class="row-two-p">
+            Answer 17 short questions about your lifestyle and health.
+            You will see an estimated risk band and the factors behind it.
+            No account and no name needed.
+        </p>
+    </div>
+    <div class="empty-container m-xl-5">
+
+    </div>
+    <div class="home-div-row-three mb-3">
+        <ShinyButton Text="Start Process" ContentPadding="5px" ButtonBackgroundColor="#3730A3" CssClass="start-question-btn" Clicked="RouteToQuestions" ErrorText="Oops failed" FullWidth="true" />
+    </div>
+
+    <div class="warning-span">Screening aid, not a diagnosis. For adults aged 18 and over.</div>
+</div>
+
+@code {
+
+    private void RouteToQuestions()
+    {
+        Navigation.NavigateTo("/questions", false);
+    }
+
+
+}

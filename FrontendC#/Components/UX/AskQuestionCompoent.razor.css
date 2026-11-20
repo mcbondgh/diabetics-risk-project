@@ -1,0 +1,14 @@
+/* CSS for AskQuestionCompoent component */
+.question-div h4 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.question-div {
+    background-color: #eff0ff83;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    font-size: smaller
+}

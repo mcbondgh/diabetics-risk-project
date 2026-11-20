@@ -1,0 +1,176 @@
+﻿@page "/questions"
+@using DiabeticsApp.Components.UX
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@layout EmptyLayout
+@using Microsoft.AspNetCore.WebUtilities;
+
+<PageTitle>Questions</PageTitle>
+
+<div class="questions-page-div">
+    <VStack class="questions-row-one" Justify="StackJustify.Center">
+        <h3>Questions Bag</h3>
+        <p>
+            All questions are required except the research option at the end. Nothing is saved unless you choose to share your answers anonymously.
+
+        </p>
+    </VStack>
+
+    <fieldset class="questions-row-two">
+        <div class="question-div">
+            <h4>1. Kindly select your gender</h4>
+            <p>Indicate wherther you're a male of female</p>
+            <div class="gender-field">
+                <label for="gender">Gender</label>
+
+                <select id="gender"
+                        class="gender-select"
+                        @bind="genderValue">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="question-div">
+            <h4>2. What is your current age</h4>
+            <p>In years. This tool is for adults aged 18 to 110.</p>
+            <input type="number" @bind="ageValue" name="age-input" min="18" max="110" placeholder="18" class="user-number-input w-100 p-2 rounded-2 border"/>
+        </div>
+
+        <!--Question 3 section -->
+        <div class="question-div">
+            <h4>3. How tall are you, and how much do you weigh</h4>
+            <p>Height in centimetres, from 100 to 250 and weight in kilograms, from 25 to 400.</p>
+            <div class="question-numbers-div d-flex gap-3">
+                <div class="d-grid input-group">
+                    <label class="mb-1 fw-bold">Height(cm)</label>
+                    <input type="number" title="height" name="height-input" @bind-value="@heightValue" @bind:event="onchange" min="100" max="300" placeholder="100" class="user-number-input w-100 p-2 rounded-2 border" />
+                </div>
+                
+                <div class="d-grid input-group">
+                    <label class="mb-1 fw-bold">Weight(kg)</label>
+                    <input type="number" title="weight" name="weight-input" @bind-value="weightValue" @bind:event="onchange" min="25" max="400" placeholder="100" class="user-number-input w-100 p-2 rounded-2 border" />
+                </div>
+            </div>
+
+            <div class="d-grid w-100 mt-3 bmi-div">
+                <h5 class="fw-bold">
+                    Your BMI (calculated): @bmiValue.ToString("F2") kg/m²
+                </h5>
+                <p> Worked out from your height and weight. Above 30 counts as obese on the WHO scale. </p>
+            </div>
+        </div>
+
+        <!--Question 4 section -->
+        <div class="question-div">
+            <h4>4. In the past 30 days, did you do any physical activity outside your job? </h4>
+            <span>Walking, running, sports or gardening all count.</span>
+
+            <div class="radio-button-container">
+                <RadioGroup TValue="string"
+                            Options="@optionsList"
+                            @bind-Value="@physicalActivity" />
+            </div>
+        </div> 
+
+        <!--Question 5 section -->
+        <div class="question-div">
+            <h4>5. Have you smoked at least 100 cigarettes in your whole life?</h4>
+            <span>100 cigarettes is about 5 packs.</span>
+
+            <div class="radio-button-container">
+                <RadioGroup TValue="string"
+                            Options="@optionsList"
+                            @bind-Value="@smokedBefore" />
+            </div>
+        </div>
+
+        <!--Question 6 section -->
+        <div class="question-div">
+            <h4>6. Do you eat fruit one or more times a day?</h4>
+            <span>A fruit a day keeps the doctor away.</span>
+
+            <div class="radio-button-container">
+                <RadioGroup TValue="string"
+                            Options="@optionsList"
+                            @bind-Value="@eatsFruits" />
+            </div>
+        </div>
+
+        <!--Question 7 section -->
+        <div class="question-div">
+            <h4>7.Do you eat vegetables one or more times a day?</h4>
+            <span>Very good to regulate your health</span>
+
+            <div class="radio-button-container">
+                <RadioGroup TValue="string"
+                            Options="@optionsList"
+                            @bind-Value="@eatsVegis" />
+            </div>
+        </div>
+
+        <!--Question 8 section -->
+        <div class="question-div">
+            <h4>8.Do you drink heavily?</h4>
+            <span>Heavy drinking means more than 14 drinks a week for men, or more than 7 drinks a week for women.</span>
+
+            <div class="radio-button-container">
+                <RadioGroup TValue="string"
+                            Options="@optionsList"
+                            @bind-Value="@drinksHeavy" />
+            </div>
+        </div>
+
+        <hr />
+        <ShinyButton Disabled="@isLoading" FullWidth ContentPadding="5px" ButtonBackgroundColor="#3730A3" Text="@( isLoading ? "Processing..." : "Submit Answers")" Clicked="SubmitFormResults" />
+    </fieldset>
+
+</div>
+
+
+@code {
+
+    private List<RadioOption<string>> optionsList =
+    [
+        new() { Value = "No", Text = "No" },
+        new() { Value = "Yes", Text = "Yes"}
+    ];
+
+    private static int ageValue = 18;
+    private static int weightValue = 20;
+    private static int heightValue = 100;
+    private static string genderValue = "Male";
+    private static string physicalActivity = "No";
+    private static string smokedBefore = "No";
+    private static string eatsFruits = "No";
+    private static string eatsVegis = "No";
+    private static string drinksHeavy = "No";
+
+    private double bmiValue
+    {
+        get
+        {
+            if (weightValue <= 0 || heightValue <= 0)
+                return 0;
+
+            double heightMeters = heightValue / 100.0;
+
+            return weightValue / (heightMeters * heightMeters);
+        }
+    }
+
+    private bool isLoading;
+
+    private async Task SubmitFormResults()
+    {
+        isLoading = true;
+
+        await Task.Delay(3000);
+
+        isLoading = false;
+        String queryParams = $"age={ageValue}&bmi={bmiValue}&gender={genderValue}";
+        NavigationManager.NavigateTo($"/results?{queryParams}");
+    }
+}

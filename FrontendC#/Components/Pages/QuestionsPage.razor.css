@@ -1,0 +1,107 @@
+/* CSS for QuestionsPage component */
+.questions-page-div {
+    box-sizing: border-box;
+    width: 60%;
+    margin: 10px auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding:10px 15px;
+}
+
+.question-div h4 {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.question-div {
+    background-color: #eff0ff83;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-bottom: 1.2rem;
+    font-size: smaller
+}
+
+.questions-row-one h3 {
+    font-weight:bolder;
+}
+
+.questions-row-one p {
+    color:#808080;
+}
+
+.questions-row-two{
+    box-sizing:border-box;
+}
+
+.toggle-button {
+    width:200px;
+    padding:20px;
+}
+.question-submit-btn {
+    background:red;
+}
+.question-submit-btn {
+        background-color:red;
+}
+.bmi-div {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 3px 12px;
+    padding: 10px 20px;
+    background: #E3F2F0;
+    border-radius: 12px;
+}
+
+.bmi-div h5 {
+    font-size:15px;
+}
+
+.gender-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+    .gender-field label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #374151;
+    }
+
+.gender-select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #1f2937;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .gender-select:hover {
+        border-color: #9ca3af;
+    }
+
+    .gender-select:focus {
+        outline: none;
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    }
+
+    .gender-select option {
+        padding: 1px;
+    }
+
+@media (max-width: 768px) {
+    .questions-page-div {
+        width: 100%;
+        padding: 0;
+        border:none;
+    }
+}
